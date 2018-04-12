@@ -7,7 +7,9 @@ public class Buttonpop : MonoBehaviour, Vuforia.ITrackableEventHandler {
 	private Vuforia.TrackableBehaviour mTrackableBehaviour;
 
 	private bool mShowGUIButton = false;
-	private Rect mButtonRect = new Rect(50,50,500,300);
+	private Rect mButtonRect = new Rect(50,50,800,1000);
+	public GameObject chest;
+
 
 
 	void Start () {
@@ -33,8 +35,12 @@ public class Buttonpop : MonoBehaviour, Vuforia.ITrackableEventHandler {
 		//}
 	}
 	void DoMyWindow(int windowID) {
-		GUIStyle Textbox = new GUIStyle(GUI.skin.textArea);
-		Textbox.fontSize = 20;
+
+		GUIStyle buttonFont = new GUIStyle(GUI.skin.button);
+		buttonFont.fontSize = 35;
+
+		GUIStyle Textbox = new GUIStyle(GUI.skin.label);
+		Textbox.fontSize = 40;
 		Textbox.normal.background = null;
 		Textbox.active.background = null;
 		Textbox.onHover.background = null;
@@ -42,8 +48,17 @@ public class Buttonpop : MonoBehaviour, Vuforia.ITrackableEventHandler {
 		Textbox.onFocused.background = null;
 		Textbox.focused.background = null;
 		Textbox.normal.textColor = Color.cyan;
-		GUI.TextArea (new Rect(50,50,300,150), "This is some text for the main box xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", Textbox);
-		if (GUI.Button (new Rect (10, 20, 100, 20), "Close")) 
+		Textbox.alignment = TextAnchor.MiddleCenter;
+
+		GUIStyle TitleStyle = new GUIStyle (GUI.skin.label);
+		TitleStyle.alignment = TextAnchor.UpperRight;
+		TitleStyle.normal.textColor = Color.red;
+
+		GUI.Label (new Rect (500, 500, 800, 600), "ITEM FOUND", TitleStyle);
+
+		//GUI.Label (new Rect(50,50,700,900), "This is some text for the main box xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", Textbox);
+
+		if (GUI.Button (new Rect (10, 20, 300, 60), "Close", buttonFont)) 
 		{
 			mShowGUIButton = false;
 
@@ -51,8 +66,16 @@ public class Buttonpop : MonoBehaviour, Vuforia.ITrackableEventHandler {
 
 	}
 	void OnGUI() {
-		if (mShowGUIButton) {
-			mButtonRect = GUI.Window(0, mButtonRect, DoMyWindow, "Name of Item at York Minster");
+		if (mShowGUIButton == true) {
+			
+			chest = GameObject.Find ("OldChest/Chest");
+			chest.SetActive (true);
+			GameObject.Destroy (chest, 5);
+
+			mButtonRect = GUI.Window (0, mButtonRect, DoMyWindow, "");
+		} else {
+			chest = GameObject.Find ("OldChest/Chest");
+			chest.SetActive (false);
 		}
 	}
 }
