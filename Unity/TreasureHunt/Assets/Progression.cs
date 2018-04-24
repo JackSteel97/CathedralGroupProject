@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Progression {
 
@@ -7,11 +8,13 @@ public class Progression {
     private int numberFoundByPlayer;
     private List<string> itemsFound;
     private List<string> allPossibleItems;
+    public Slider progressSlider;
 
     public Progression(List<string> allPossibleItemNames) {
         numberOfItemsToFind = allPossibleItemNames.Count;
         allPossibleItems = allPossibleItemNames;
         loadPreviouslyFound();
+        progressSlider.value = (float)getPercentageDiscovered();
     }
 
     private void loadPreviouslyFound() {
@@ -45,5 +48,10 @@ public class Progression {
 
     public decimal getPercentageDiscovered() {
         return System.Math.Round((decimal)(numberFoundByPlayer / numberOfItemsToFind) * 100, 2);
+    }
+
+    public void updateSlider()
+    {
+        progressSlider.value = (float)getPercentageDiscovered();
     }
 }
