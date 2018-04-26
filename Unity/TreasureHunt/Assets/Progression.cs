@@ -4,54 +4,60 @@ using UnityEngine.UI;
 
 public class Progression {
 
-    private int numberOfItemsToFind;
-    private int numberFoundByPlayer;
-    private List<string> itemsFound;
-    private List<string> allPossibleItems;
-    public Slider progressSlider;
+    private static int numberOfItemsToFind;
+    private static int numberFoundByPlayer;
+    private static List<string> itemsFound;
+    private static List<string> allPossibleItems;
 
-    public Progression(List<string> allPossibleItemNames) {
-        numberOfItemsToFind = allPossibleItemNames.Count;
-        allPossibleItems = allPossibleItemNames;
+    public static void init() {
+        allPossibleItems = new List<string>() { "brokenfork", "clover", "brexit", "whisperingeye", "hourglass" };
+        numberOfItemsToFind = allPossibleItems.Count;
+        itemsFound = new List<string>();
         loadPreviouslyFound();
-        progressSlider.value = (float)getPercentageDiscovered();
     }
 
-    private void loadPreviouslyFound() {
-        foreach(string item in allPossibleItems) {
-            if(PlayerPrefs.HasKey(item) && PlayerPrefs.GetInt(item, 0) == 1) {
+    private static void loadPreviouslyFound() {
+        foreach (string item in allPossibleItems) {
+            if (PlayerPrefs.HasKey(item) && PlayerPrefs.GetInt(item, 0) == 1) {
                 //found
                 itemsFound.Add(item);
+                numberFoundByPlayer++;
             }
         }
     }
 
-    public bool discoverItem(string itemName) {
-        if(allPossibleItems.Contains(itemName) && !itemsFound.Contains(itemName)) {
+    public static bool discoverItem(string itemName) {
+        if (itemName != null && allPossibleItems.Contains(itemName) && !itemsFound.Contains(itemName)) {
             //discoverable
             PlayerPrefs.SetInt(itemName, 1);
+            numberFoundByPlayer++;
+            itemsFound.Add(itemName);
             return true;
         }
         //failed
         return false;
     }
 
-    public bool undiscoverItem(string itemName) {
+    public static bool undiscoverItem(string itemName) {
         if (allPossibleItems.Contains(itemName) && itemsFound.Contains(itemName)) {
             //already discovered
             PlayerPrefs.SetInt(itemName, 0);
+            numberFoundByPlayer--;
+            itemsFound.Remove(itemName);
             return true;
         }
         //failed
         return false;
     }
 
-    public decimal getPercentageDiscovered() {
-        return System.Math.Round((decimal)(numberFoundByPlayer / numberOfItemsToFind) * 100, 2);
+    public static bool discovered(string itemName) {
+        if (itemName != null && allPossibleItems.Contains(itemName) && !itemsFound.Contains(itemName)) {
+            return false;
+        }
+        return true;
     }
 
-    public void updateSlider()
-    {
-        progressSlider.value = (float)getPercentageDiscovered();
+    public static float getPercentageDiscovered() {
+        return ((float)numberFoundByPlayer / (float)numberOfItemsToFind);
     }
 }

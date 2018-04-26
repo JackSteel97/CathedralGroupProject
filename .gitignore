@@ -33,3 +33,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+/Unity/TreasureHunt/.vs/TreasureHunt/v15/Server/sqlite3/storage.ide-shm
+/Unity/TreasureHunt/.vs/TreasureHunt/v15/Server/sqlite3/storage.ide-wal
